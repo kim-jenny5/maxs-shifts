@@ -211,7 +211,7 @@
 					{/if}
 				</Button>
 			{:else if showPinInput}
-				<div class="flex flex-col gap-2">
+				<div class="w-full flex flex-col gap-2">
 					<div class="flex gap-2">
 						<input
 							type="password"
