@@ -30,6 +30,10 @@
 	let nightIconRef = $state<HTMLSpanElement | null>(null);
 	let pillRef = $state<HTMLDivElement | null>(null);
 
+	function twColor(name: string): string {
+		return getComputedStyle(document.documentElement).getPropertyValue(`--color-${name}`).trim();
+	}
+
 	let firstRun = true;
 
 	$effect(() => {
@@ -42,18 +46,18 @@
 			top: targetBtn.offsetTop,
 			width: targetBtn.offsetWidth,
 			height: targetBtn.offsetHeight,
-			backgroundColor: isDay ? '#fde68a' : '#172554'
+			backgroundColor: isDay ? twColor('amber-200') : twColor('blue-950')
 		};
 
 		if (firstRun) {
 			gsap.set(pillRef, pillProps);
-			gsap.set(dayBtnRef, { color: isDay ? '#92400e' : '#a8a29e' });
-			gsap.set(nightBtnRef, { color: !isDay ? '#fafafa' : '#a8a29e' });
+			gsap.set(dayBtnRef, { color: isDay ? twColor('amber-800') : twColor('stone-400') });
+			gsap.set(nightBtnRef, { color: !isDay ? twColor('neutral-50') : twColor('stone-400') });
 			firstRun = false;
 		} else {
 			gsap.to(pillRef, { ...pillProps, duration: 0.3, ease: 'power2.inOut' });
-			gsap.to(dayBtnRef, { color: isDay ? '#92400e' : '#a8a29e', duration: 0.2 });
-			gsap.to(nightBtnRef, { color: !isDay ? '#fafafa' : '#a8a29e', duration: 0.2 });
+			gsap.to(dayBtnRef, { color: isDay ? twColor('amber-800') : twColor('stone-400'), duration: 0.2 });
+			gsap.to(nightBtnRef, { color: !isDay ? twColor('neutral-50') : twColor('stone-400'), duration: 0.2 });
 		}
 	});
 
