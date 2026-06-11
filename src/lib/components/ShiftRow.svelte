@@ -30,10 +30,16 @@
 	let nightIconRef = $state<HTMLSpanElement | null>(null);
 	let pillRef = $state<HTMLDivElement | null>(null);
 
-	function twColor(name: string): string {
-		return getComputedStyle(document.documentElement)
-			.getPropertyValue(`--color-${name}`)
-			.trim();
+	const colors = {
+		'amber-200': 'oklch(0.924 0.12 95.746)',
+		'amber-800': 'oklch(0.473 0.137 46.201)',
+		'blue-950':  'oklch(0.282 0.091 267.935)',
+		'neutral-50': 'oklch(0.985 0 0)',
+		'stone-400': 'oklch(0.677 0.011 56.017)'
+	} as const;
+
+	function twColor(name: keyof typeof colors): string {
+		return colors[name];
 	}
 
 	const shiftType = $derived(shift.type);
