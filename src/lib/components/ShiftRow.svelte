@@ -105,6 +105,7 @@
 		'w-[60px] bg-transparent text-base font-medium text-gray-900 outline-none ring-0 focus:outline-none focus:ring-0 focus:shadow-none border-0 text-center placeholder:text-gray-300';
 
 	const btnBase = 'cursor-pointer rounded-full border-0 px-3 py-2 text-xs font-semibold';
+
 </script>
 
 <div

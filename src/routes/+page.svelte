@@ -126,12 +126,14 @@
 		}
 	}
 
+	let deletingId = $state<string | null>(null);
+
 	async function deleteShift(eventId: string) {
-		await fetch(`/api/shifts/${encodeURIComponent(eventId)}`, {
-			method: 'DELETE'
-		});
+		deletingId = eventId;
+		await fetch(`/api/shifts/${encodeURIComponent(eventId)}`, { method: 'DELETE' });
 		visibleCount = 6;
 		await invalidateAll();
+		deletingId = null;
 	}
 </script>
 
@@ -147,7 +149,7 @@
 			<div class="mb-3 flex flex-col gap-2 w-full">
 				{#each shifts as shift (shift.id)}
 					{@const id = shift.id}
-					<div transition:slide={{ duration: 250, easing: linear }}>
+					<div in:slide={{ duration: 250, easing: linear }}>
 						<ShiftRow
 							{shift}
 							onUpdate={(delta) => update(id, delta)}
@@ -205,8 +207,8 @@
 					{:else}
 						<CalendarDays size={15} />
 						{filled.length
-							? `Add ${filled.length} shift${filled.length !== 1 ? 's' : ''} to Jenny's Calendar`
-							: "Add to Jenny's Calendar"}
+							? `Add ${filled.length} shift${filled.length !== 1 ? 's' : ''} to Google Calendar`
+							: 'Add to Google Calendar'}
 					{/if}
 				</Button>
 			{:else if showPinInput}
@@ -295,6 +297,7 @@
 									{#if authed}
 										<button
 											onclick={() => deleteShift(event.id)}
+											disabled={deletingId === event.id}
 											class={cn(
 												'cursor-pointer border-0 bg-transparent p-1 transition-colors',
 												isNight
@@ -303,7 +306,11 @@
 											)}
 											aria-label="Delete shift"
 										>
-											<X size={15} />
+											{#if deletingId === event.id}
+												<Loader2 size={15} class="animate-spin" />
+											{:else}
+												<X size={15} />
+											{/if}
 										</button>
 									{/if}
 								</div>
