@@ -2,7 +2,7 @@
 	import { cn } from '$lib/utils';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import type { GCalEvent } from '$lib/server/gcal';
+	import type { GCalEvent } from '$lib/shifts';
 
 	let { events }: { events: GCalEvent[] } = $props();
 

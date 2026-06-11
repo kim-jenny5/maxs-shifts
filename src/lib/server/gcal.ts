@@ -4,15 +4,10 @@ import {
 	GOOGLE_REFRESH_TOKEN,
 	TIMEZONE
 } from '$env/static/private';
+import type { GCalEvent } from '$lib/shifts';
 
 export { TIMEZONE };
-
-export type GCalEvent = {
-	id: string;
-	date: string;
-	type: 'day' | 'night';
-	summary: string;
-};
+export type { GCalEvent };
 
 export async function getAccessToken(): Promise<string> {
 	const res = await fetch('https://oauth2.googleapis.com/token', {
@@ -26,7 +21,10 @@ export async function getAccessToken(): Promise<string> {
 		})
 	});
 	const data = await res.json();
-	if (!data.access_token) throw new Error('Failed to refresh Google access token');
+	if (!data.access_token) {
+		console.error('Google token refresh failed:', JSON.stringify(data));
+		throw new Error('Failed to refresh Google access token');
+	}
 	return data.access_token;
 }
 

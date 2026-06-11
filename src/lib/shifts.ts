@@ -1,5 +1,12 @@
 export type ShiftType = 'day' | 'night';
 
+export type GCalEvent = {
+	id: string;
+	date: string;
+	type: ShiftType;
+	summary: string;
+};
+
 export type Shift = {
 	id: number;
 	raw: string;

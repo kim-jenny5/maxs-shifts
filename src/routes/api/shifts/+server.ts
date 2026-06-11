@@ -19,11 +19,19 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
 	const { events } = await request.json();
 
-	const [token, existing] = await Promise.all([
-		getAccessToken(),
-		fetchUpcomingEvents()
+	let token: string;
+	try {
+		token = await getAccessToken();
+	} catch (e) {
+		throw error(500, `Google auth failed: ${e instanceof Error ? e.message : String(e)}`);
+	}
+
+	const [existing, calendarId] = await Promise.all([
+		fetchUpcomingEvents().catch(() => []),
+		getOrCreateCalendarId(token).catch((e) => {
+			throw error(500, `Calendar lookup failed: ${e instanceof Error ? e.message : String(e)}`);
+		})
 	]);
-	const calendarId = await getOrCreateCalendarId(token);
 
 	const existingKeys = new Set(existing.map((e) => `${e.date}:${e.type}`));
 	const toAdd = events.filter(

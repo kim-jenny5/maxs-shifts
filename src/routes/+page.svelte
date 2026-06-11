@@ -78,7 +78,7 @@
 			}
 			pin = '';
 			showPinInput = false;
-			await invalidateAll();
+			location.reload();
 		} finally {
 			pinLoading = false;
 		}
