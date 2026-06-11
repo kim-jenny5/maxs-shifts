@@ -5,5 +5,12 @@
 	let { children } = $props();
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href={favicon} />
+	<title>Max's Shifts</title>
+	<meta
+		name="description"
+		content="A simple way to track Max's shifts and sync them to Google Calendar."
+	/>
+</svelte:head>
 {@render children()}
