@@ -151,7 +151,7 @@
 			<div class="mb-3 flex flex-col gap-2 w-full">
 				{#each shifts as shift (shift.id)}
 					{@const id = shift.id}
-					<div in:slide={{ duration: 250, easing: linear }}>
+					<div in:slide={{ duration: 250, easing: linear }} out:slide={{ duration: 250, easing: linear }}>
 						<ShiftRow
 							{shift}
 							onUpdate={(delta) => update(id, delta)}
