@@ -34,10 +34,12 @@
 		return getComputedStyle(document.documentElement).getPropertyValue(`--color-${name}`).trim();
 	}
 
+	const shiftType = $derived(shift.type);
+
 	let firstRun = true;
 
 	$effect(() => {
-		const isDay = shift.type === 'day';
+		const isDay = shiftType === 'day';
 		const targetBtn = isDay ? dayBtnRef : nightBtnRef;
 		if (!pillRef || !targetBtn || !dayBtnRef || !nightBtnRef) return;
 
