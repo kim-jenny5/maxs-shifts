@@ -31,7 +31,9 @@
 	let pillRef = $state<HTMLDivElement | null>(null);
 
 	function twColor(name: string): string {
-		return getComputedStyle(document.documentElement).getPropertyValue(`--color-${name}`).trim();
+		return getComputedStyle(document.documentElement)
+			.getPropertyValue(`--color-${name}`)
+			.trim();
 	}
 
 	const shiftType = $derived(shift.type);
@@ -53,13 +55,23 @@
 
 		if (firstRun) {
 			gsap.set(pillRef, pillProps);
-			gsap.set(dayBtnRef, { color: isDay ? twColor('amber-800') : twColor('stone-400') });
-			gsap.set(nightBtnRef, { color: !isDay ? twColor('neutral-50') : twColor('stone-400') });
+			gsap.set(dayBtnRef, {
+				color: isDay ? twColor('amber-800') : twColor('stone-400')
+			});
+			gsap.set(nightBtnRef, {
+				color: !isDay ? twColor('neutral-50') : twColor('stone-400')
+			});
 			firstRun = false;
 		} else {
 			gsap.to(pillRef, { ...pillProps, duration: 0.3, ease: 'power2.inOut' });
-			gsap.to(dayBtnRef, { color: isDay ? twColor('amber-800') : twColor('stone-400'), duration: 0.2 });
-			gsap.to(nightBtnRef, { color: !isDay ? twColor('neutral-50') : twColor('stone-400'), duration: 0.2 });
+			gsap.to(dayBtnRef, {
+				color: isDay ? twColor('amber-800') : twColor('stone-400'),
+				duration: 0.2
+			});
+			gsap.to(nightBtnRef, {
+				color: !isDay ? twColor('neutral-50') : twColor('stone-400'),
+				duration: 0.2
+			});
 		}
 	});
 
@@ -68,7 +80,12 @@
 		onUpdate({ type });
 
 		const icon = type === 'day' ? dayIconRef : nightIconRef;
-		if (icon) gsap.fromTo(icon, { scale: 0.3, rotation: type === 'day' ? 90 : -90 }, { scale: 1, rotation: 0, duration: 0.4, ease: 'back.out(2)' });
+		if (icon)
+			gsap.fromTo(
+				icon,
+				{ scale: 0.3, rotation: type === 'day' ? 90 : -90 },
+				{ scale: 1, rotation: 0, duration: 0.4, ease: 'back.out(2)' }
+			);
 	}
 
 	function sync(m: string, d: string) {
@@ -104,8 +121,8 @@
 	const inputClass =
 		'w-[60px] bg-transparent text-base font-medium text-gray-900 outline-none ring-0 focus:outline-none focus:ring-0 focus:shadow-none border-0 text-center placeholder:text-gray-300';
 
-	const btnBase = 'cursor-pointer rounded-full border-0 px-3 py-2 text-xs font-semibold';
-
+	const btnBase =
+		'cursor-pointer rounded-full border-0 px-3 py-2 text-xs font-semibold';
 </script>
 
 <div
@@ -153,12 +170,27 @@
 	</div>
 
 	<div class="relative flex shrink-0 gap-1 rounded-full bg-stone-100 p-1">
-		<div bind:this={pillRef} class="pointer-events-none absolute rounded-full"></div>
-		<button bind:this={dayBtnRef} onclick={() => handleToggle('day')} class="relative z-10 {btnBase}">
-			<span class="hidden sm:inline">Day </span><span bind:this={dayIconRef}>☀️</span>
+		<div
+			bind:this={pillRef}
+			class="pointer-events-none absolute rounded-full"
+		></div>
+		<button
+			bind:this={dayBtnRef}
+			onclick={() => handleToggle('day')}
+			class="relative z-10 {btnBase}"
+		>
+			<span class="hidden sm:inline">Day </span><span bind:this={dayIconRef}
+				>☀️</span
+			>
 		</button>
-		<button bind:this={nightBtnRef} onclick={() => handleToggle('night')} class="relative z-10 {btnBase}">
-			<span class="hidden sm:inline">Night </span><span bind:this={nightIconRef}>🌙</span>
+		<button
+			bind:this={nightBtnRef}
+			onclick={() => handleToggle('night')}
+			class="relative z-10 {btnBase}"
+		>
+			<span class="hidden sm:inline">Night </span><span bind:this={nightIconRef}
+				>🌙</span
+			>
 		</button>
 	</div>
 

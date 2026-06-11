@@ -23,13 +23,19 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	try {
 		token = await getAccessToken();
 	} catch (e) {
-		throw error(500, `Google auth failed: ${e instanceof Error ? e.message : String(e)}`);
+		throw error(
+			500,
+			`Google auth failed: ${e instanceof Error ? e.message : String(e)}`
+		);
 	}
 
 	const [existing, calendarId] = await Promise.all([
 		fetchUpcomingEvents().catch(() => []),
 		getOrCreateCalendarId(token).catch((e) => {
-			throw error(500, `Calendar lookup failed: ${e instanceof Error ? e.message : String(e)}`);
+			throw error(
+				500,
+				`Calendar lookup failed: ${e instanceof Error ? e.message : String(e)}`
+			);
 		})
 	]);
 

@@ -29,11 +29,17 @@ export async function getAccessToken(): Promise<string> {
 }
 
 export async function findCalendarId(token: string): Promise<string | null> {
-	const res = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
-		headers: { Authorization: `Bearer ${token}` }
-	});
+	const res = await fetch(
+		'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+		{
+			headers: { Authorization: `Bearer ${token}` }
+		}
+	);
 	const list = await res.json();
-	return list.items?.find((c: { summary: string }) => c.summary === "Max's Shifts")?.id ?? null;
+	return (
+		list.items?.find((c: { summary: string }) => c.summary === "Max's Shifts")
+			?.id ?? null
+	);
 }
 
 export async function getOrCreateCalendarId(token: string): Promise<string> {
@@ -42,7 +48,10 @@ export async function getOrCreateCalendarId(token: string): Promise<string> {
 
 	const res = await fetch('https://www.googleapis.com/calendar/v3/calendars', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`
+		},
 		body: JSON.stringify({ summary: "Max's Shifts" })
 	});
 	const cal = await res.json();
@@ -55,7 +64,9 @@ export async function fetchUpcomingEvents(): Promise<GCalEvent[]> {
 	if (!calendarId) return [];
 
 	const timeMin = new Date().toISOString();
-	const timeMax = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString();
+	const timeMax = new Date(
+		Date.now() + 180 * 24 * 60 * 60 * 1000
+	).toISOString();
 
 	const url = new URL(
 		`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`
@@ -65,7 +76,9 @@ export async function fetchUpcomingEvents(): Promise<GCalEvent[]> {
 	url.searchParams.set('singleEvents', 'true');
 	url.searchParams.set('orderBy', 'startTime');
 
-	const res = await fetch(url.toString(), { headers: { Authorization: `Bearer ${token}` } });
+	const res = await fetch(url.toString(), {
+		headers: { Authorization: `Bearer ${token}` }
+	});
 	const data = await res.json();
 
 	return (data.items || []).map(
@@ -73,7 +86,9 @@ export async function fetchUpcomingEvents(): Promise<GCalEvent[]> {
 			id: item.id,
 			summary: item.summary,
 			date: (item.start.dateTime ?? '').split('T')[0],
-			type: item.summary?.includes('Day') ? ('day' as const) : ('night' as const)
+			type: item.summary?.includes('Day')
+				? ('day' as const)
+				: ('night' as const)
 		})
 	);
 }

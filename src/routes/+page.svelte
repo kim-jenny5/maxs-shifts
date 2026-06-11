@@ -130,15 +130,17 @@
 
 	async function deleteShift(eventId: string) {
 		deletingId = eventId;
-		await fetch(`/api/shifts/${encodeURIComponent(eventId)}`, { method: 'DELETE' });
+		await fetch(`/api/shifts/${encodeURIComponent(eventId)}`, {
+			method: 'DELETE'
+		});
 		visibleCount = 6;
 		await invalidateAll();
 		deletingId = null;
 	}
 </script>
 
-<div class="min-h-screen bg-gray-50">
-	<div class="mx-auto max-w-4xl px-5 py-10">
+<div class="bg-gray-50">
+	<div class="min-h-screen mx-auto max-w-4xl px-5 py-10">
 		<div class="flex flex-col items-center mx-auto max-w-md">
 			<div class="mb-6">
 				<h1 class="text-2xl font-bold tracking-tight text-gray-900">

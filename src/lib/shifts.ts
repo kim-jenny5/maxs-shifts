@@ -16,7 +16,9 @@ export type Shift = {
 
 export function parseShortDate(input: string): Date | null {
 	if (!input) return null;
-	const match = input.trim().match(/^(\d{1,2})[\/\-\.](\d{1,2})(?:[\/\-\.](\d{2,4}))?$/);
+	const match = input
+		.trim()
+		.match(/^(\d{1,2})[\/\-\.](\d{1,2})(?:[\/\-\.](\d{2,4}))?$/);
 	if (!match) return null;
 	const month = parseInt(match[1], 10);
 	const day = parseInt(match[2], 10);
@@ -38,5 +40,9 @@ export function parseShortDate(input: string): Date | null {
 }
 
 export function formatDisplay(date: Date): string {
-	return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+	return date.toLocaleDateString('en-US', {
+		weekday: 'short',
+		month: 'short',
+		day: 'numeric'
+	});
 }

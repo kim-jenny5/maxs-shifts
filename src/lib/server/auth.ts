@@ -10,13 +10,19 @@ async function computeToken(): Promise<string> {
 		false,
 		['sign']
 	);
-	const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(TOKEN_VALUE));
+	const sig = await crypto.subtle.sign(
+		'HMAC',
+		key,
+		new TextEncoder().encode(TOKEN_VALUE)
+	);
 	return Array.from(new Uint8Array(sig))
 		.map((b) => b.toString(16).padStart(2, '0'))
 		.join('');
 }
 
-export async function isAuthed(cookieValue: string | undefined): Promise<boolean> {
+export async function isAuthed(
+	cookieValue: string | undefined
+): Promise<boolean> {
 	if (!cookieValue) return false;
 	const expected = await computeToken();
 	return cookieValue === expected;
