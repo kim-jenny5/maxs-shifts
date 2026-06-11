@@ -1,4 +1,5 @@
 <script lang="ts">
+	import gsap from 'gsap';
 	import X from '@lucide/svelte/icons/x';
 	import { cn } from '$lib/utils';
 	import { parseShortDate, formatDisplay, type Shift } from '$lib/shifts';
@@ -22,6 +23,47 @@
 	let month = $state(initialParts[0] ?? '');
 	let day = $state(initialParts[1] ?? '');
 	let dayRef = $state<HTMLInputElement | null>(null);
+
+	let dayBtnRef = $state<HTMLButtonElement | null>(null);
+	let nightBtnRef = $state<HTMLButtonElement | null>(null);
+	let dayIconRef = $state<HTMLSpanElement | null>(null);
+	let nightIconRef = $state<HTMLSpanElement | null>(null);
+	let pillRef = $state<HTMLDivElement | null>(null);
+
+	let firstRun = true;
+
+	$effect(() => {
+		const isDay = shift.type === 'day';
+		const targetBtn = isDay ? dayBtnRef : nightBtnRef;
+		if (!pillRef || !targetBtn || !dayBtnRef || !nightBtnRef) return;
+
+		const pillProps = {
+			left: targetBtn.offsetLeft,
+			top: targetBtn.offsetTop,
+			width: targetBtn.offsetWidth,
+			height: targetBtn.offsetHeight,
+			backgroundColor: isDay ? '#fde68a' : '#172554'
+		};
+
+		if (firstRun) {
+			gsap.set(pillRef, pillProps);
+			gsap.set(dayBtnRef, { color: isDay ? '#92400e' : '#a8a29e' });
+			gsap.set(nightBtnRef, { color: !isDay ? '#fafafa' : '#a8a29e' });
+			firstRun = false;
+		} else {
+			gsap.to(pillRef, { ...pillProps, duration: 0.3, ease: 'power2.inOut' });
+			gsap.to(dayBtnRef, { color: isDay ? '#92400e' : '#a8a29e', duration: 0.2 });
+			gsap.to(nightBtnRef, { color: !isDay ? '#fafafa' : '#a8a29e', duration: 0.2 });
+		}
+	});
+
+	function handleToggle(type: 'day' | 'night') {
+		if (shift.type === type) return;
+		onUpdate({ type });
+
+		const icon = type === 'day' ? dayIconRef : nightIconRef;
+		if (icon) gsap.fromTo(icon, { scale: 0.3, rotation: type === 'day' ? 90 : -90 }, { scale: 1, rotation: 0, duration: 0.4, ease: 'back.out(2)' });
+	}
 
 	function sync(m: string, d: string) {
 		const raw = m || d ? `${m}/${d}` : '';
@@ -56,22 +98,7 @@
 	const inputClass =
 		'w-[60px] bg-transparent text-base font-medium text-gray-900 outline-none ring-0 focus:outline-none focus:ring-0 focus:shadow-none border-0 text-center placeholder:text-gray-300';
 
-	const toggleOptions = [
-		{
-			t: 'day' as const,
-			label: 'Day',
-			icon: '☀️',
-			activeBg: 'bg-amber-200',
-			activeText: 'text-amber-800'
-		},
-		{
-			t: 'night' as const,
-			label: 'Night',
-			icon: '🌙',
-			activeBg: 'bg-blue-950',
-			activeText: 'text-neutral-50'
-		}
-	];
+	const btnBase = 'cursor-pointer rounded-full border-0 px-3 py-2 text-xs font-semibold';
 </script>
 
 <div
@@ -118,20 +145,14 @@
 		{/if}
 	</div>
 
-	<div class="flex shrink-0 gap-1 rounded-full bg-stone-100 p-1">
-		{#each toggleOptions as o}
-			<button
-				onclick={() => onUpdate({ type: o.t })}
-				class={cn(
-					'cursor-pointer rounded-full border-0 px-3 py-2 text-xs font-semibold transition-all',
-					shift.type === o.t
-						? `${o.activeBg} ${o.activeText}`
-						: 'bg-transparent text-stone-400'
-				)}
-			>
-				<span class="hidden sm:inline">{o.label} </span>{o.icon}
-			</button>
-		{/each}
+	<div class="relative flex shrink-0 gap-1 rounded-full bg-stone-100 p-1">
+		<div bind:this={pillRef} class="pointer-events-none absolute rounded-full"></div>
+		<button bind:this={dayBtnRef} onclick={() => handleToggle('day')} class="relative z-10 {btnBase}">
+			<span class="hidden sm:inline">Day </span><span bind:this={dayIconRef}>☀️</span>
+		</button>
+		<button bind:this={nightBtnRef} onclick={() => handleToggle('night')} class="relative z-10 {btnBase}">
+			<span class="hidden sm:inline">Night </span><span bind:this={nightIconRef}>🌙</span>
+		</button>
 	</div>
 
 	<button
