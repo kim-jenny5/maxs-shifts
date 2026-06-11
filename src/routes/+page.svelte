@@ -12,6 +12,8 @@
 	import { type Shift } from '$lib/shifts';
 	import { cn } from '$lib/utils';
 	import { invalidateAll } from '$app/navigation';
+	import { slide } from 'svelte/transition';
+	import { linear } from 'svelte/easing';
 
 	function formatEventDate(dateStr: string): string {
 		const [y, m, d] = dateStr.split('-').map(Number);
@@ -145,12 +147,14 @@
 			<div class="mb-3 flex flex-col gap-2 w-full">
 				{#each shifts as shift (shift.id)}
 					{@const id = shift.id}
-					<ShiftRow
-						{shift}
-						onUpdate={(delta) => update(id, delta)}
-						onRemove={() => remove(id)}
-						canRemove={shifts.length > 1}
-					/>
+					<div transition:slide={{ duration: 250, easing: linear }}>
+						<ShiftRow
+							{shift}
+							onUpdate={(delta) => update(id, delta)}
+							onRemove={() => remove(id)}
+							canRemove={shifts.length > 1}
+						/>
+					</div>
 				{/each}
 			</div>
 
@@ -215,7 +219,7 @@
 							bind:value={pin}
 							placeholder="Enter PIN"
 							onkeydown={(e) => e.key === 'Enter' && submitPin()}
-							class="flex-1 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-gray-400"
+							class="flex-1 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-base outline-none focus:border-gray-400"
 						/>
 						<Button
 							onclick={submitPin}
