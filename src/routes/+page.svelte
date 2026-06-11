@@ -9,7 +9,7 @@
 	import AlertCircle from '@lucide/svelte/icons/alert-circle';
 	import Lock from '@lucide/svelte/icons/lock';
 	import X from '@lucide/svelte/icons/x';
-	import { parseShortDate, type Shift } from '$lib/shifts';
+	import { type Shift } from '$lib/shifts';
 	import { cn } from '$lib/utils';
 	import { invalidateAll } from '$app/navigation';
 
@@ -122,11 +122,6 @@
 						: 'Something went wrong. Please try again.'
 			};
 		}
-	}
-
-	function reset() {
-		shifts = [makeShift()];
-		status = null;
 	}
 
 	async function deleteShift(eventId: string) {
