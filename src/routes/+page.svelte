@@ -278,6 +278,7 @@
 							{#each visibleEvents as event (event.id)}
 								{@const isNight = event.type === 'night'}
 								<div
+									in:slide={{ duration: 200, easing: linear }}
 									class={cn(
 										'flex items-center justify-between rounded-2xl border-[1.5px] px-4 py-3 text-gray-700',
 										isNight
