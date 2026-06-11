@@ -60,12 +60,14 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	}
 
 	const added = toAdd.length;
-	const msg =
-		added === 0
-			? `Date(s) already exist on the calendar.`
-			: skipped > 0
-				? `${added} shift${added !== 1 ? 's' : ''} added, ${skipped} already existed.`
-				: `${added} shift${added !== 1 ? 's' : ''} added! 👏🏻👏🏻`;
+	const warn = added === 0;
+	const msg = warn
+		? skipped === 1
+			? 'Date already exists on the calendar.'
+			: 'Dates already exist on the calendar.'
+		: skipped > 0
+			? `${added} shift${added !== 1 ? 's' : ''} added, ${skipped} already existed.`
+			: `${added} shift${added !== 1 ? 's' : ''} added! 👏🏻👏🏻`;
 
-	return json({ msg });
+	return json({ msg, warn });
 };
