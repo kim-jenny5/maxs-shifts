@@ -54,7 +54,7 @@
 	}
 
 	const inputClass =
-		'w-[60px] bg-transparent text-sm font-medium text-gray-900 outline-none ring-0 focus:outline-none focus:ring-0 focus:shadow-none border-0 text-center placeholder:text-gray-300';
+		'w-[60px] bg-transparent text-base font-medium text-gray-900 outline-none ring-0 focus:outline-none focus:ring-0 focus:shadow-none border-0 text-center placeholder:text-gray-300';
 
 	const toggleOptions = [
 		{
